@@ -42,8 +42,47 @@ router.post("/register", async (req, res) => {
     // save user to database
     const savedUser = await newUser.save();
 
+    const userToReturn = { ...savedUser._doc };
+    delete userToReturn.password;
+
     // return the new user
-    return res.json(savedUser);
+    return res.json(userToReturn);
+  } catch {
+    // error here
+    console.log(err);
+
+    res.status(500).send(err.message);
+  }
+});
+
+// @route POST api/auth/login
+// @desc Login user and return a access token
+// @access Public
+router.post("/login", async (req, res) => {
+  try {
+    // check if user exists
+    const user = await User.findOne({
+      email: new RegExp(`^${req.body.email}$`, "i"),
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "There was a problem with your login credentials" });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!passwordMatch) {
+      return res
+        .status(400)
+        .json({ error: "There was a problem with your login credentials" });
+    }
+
+    return res.json({ passwordMatch });
   } catch {
     // error here
     console.log(err);
