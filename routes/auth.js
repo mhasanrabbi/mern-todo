@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const validateRegisterInput = require("./validation/registerValidation");
-
+const jwt = require("jsonwebtoken");
 // @route GET api/auth/test
 // @desc Test auth route
 // @access Public
@@ -82,7 +82,24 @@ router.post("/login", async (req, res) => {
         .json({ error: "There was a problem with your login credentials" });
     }
 
-    return res.json({ passwordMatch });
+    const payload = { userId: user._id };
+
+    const token = await jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("acces-token", token, {
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+    const userToReturn = { ...user._doc };
+    delete userToReturn.password;
+
+    return res.json({
+      token,
+      user: userToReturn,
+    });
   } catch {
     // error here
     console.log(err);
