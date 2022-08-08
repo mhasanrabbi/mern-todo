@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
 
 app.use(express.json());
@@ -17,6 +19,15 @@ app.post("/name", (req, res) => {
   return res.status(400).json({ error: "No name provided" });
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Connected to DB");
+
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
