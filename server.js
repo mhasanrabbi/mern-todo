@@ -3,21 +3,19 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
+// import routes
+const authRoute = require("./routes/auth");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("Mern Todo server");
 });
 
-app.post("/name", (req, res) => {
-  if (req.body.name) {
-    return res.json({ name: req.body.name });
-  }
-  return res.status(400).json({ error: "No name provided" });
-});
+app.use("/api/auth", authRoute);
 
 mongoose
   .connect(process.env.MONGODB_URI)
