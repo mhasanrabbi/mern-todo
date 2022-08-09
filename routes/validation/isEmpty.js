@@ -1,3 +1,7 @@
+/**
+ * Check For Empty Values
+ */
+
 const isEmpty = (value) =>
   value === undefined ||
   value === null ||
