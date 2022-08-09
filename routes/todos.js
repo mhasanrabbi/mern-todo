@@ -93,6 +93,8 @@ router.put("/:toDoId/complete", requiresAuth, async (req, res) => {
         new: true,
       }
     );
+
+    return res.json(updatedToDo);
   } catch (err) {
     console.log(err);
     return res.status(500).send(err.message);
