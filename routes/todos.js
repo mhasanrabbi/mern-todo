@@ -144,4 +144,46 @@ router.put("/:toDoId/incomplete", requiresAuth, async (req, res) => {
   }
 });
 
+// @route  PUT api/todos/:toDoId
+// @desc   Update a todo
+// @access Private
+router.put("/:toDoId", requiresAuth, async (req, res) => {
+  try {
+    const toDo = await ToDo.findOne({
+      _id: req.params.toDoId,
+      user: req.user._id,
+    });
+
+    if (!toDo) {
+      return res.status(404).json({
+        msg: "ToDo not found",
+      });
+    }
+
+    const { errors, isValid } = validateToDoInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    const updatedToDo = await ToDo.findOneAndUpdate(
+      {
+        _id: req.params.toDoId,
+        user: req.user._id,
+      },
+      {
+        content: req.body.content,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return res.json(updatedToDo);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;
