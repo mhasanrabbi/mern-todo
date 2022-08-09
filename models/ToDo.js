@@ -10,7 +10,7 @@ const ToDoSchema = new Schema(
       type: String,
       required: true,
     },
-    completed: {
+    complete: {
       type: Boolean,
       default: false,
     },
@@ -23,7 +23,6 @@ const ToDoSchema = new Schema(
   }
 );
 
-// export model
-
+// export the model
 const ToDo = model("ToDo", ToDoSchema);
 module.exports = ToDo;

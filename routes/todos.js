@@ -15,7 +15,7 @@ router.post("/new", requiresAuth, async (req, res) => {
   try {
     // create new todo
     const newToDo = new ToDo({
-      user: req.user.id,
+      user: req.user._id,
       content: req.body.content,
       complete: false,
     });
@@ -25,6 +25,29 @@ router.post("/new", requiresAuth, async (req, res) => {
     return res.json(newToDo);
   } catch (err) {
     console.log(err);
+    return res.status(500).send(err.message);
+  }
+});
+
+// @route  GET api/todos/current
+// @desc   Current user todo
+// @access Private
+router.get("/current", requiresAuth, async (req, res) => {
+  try {
+    const completeToDos = await ToDo.find({
+      user: req.user._id,
+      complete: true,
+    }).sort({ completedAt: -1 });
+
+    const incompleteToDos = await ToDo.find({
+      user: req.user._id,
+      complete: false,
+    }).sort({ createdAt: -1 });
+
+    return res.json({ incomplete: incompleteToDos, complete: completeToDos });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err.message);
   }
 });
 
