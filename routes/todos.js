@@ -58,4 +58,45 @@ router.get("/current", requiresAuth, async (req, res) => {
   }
 });
 
+// @route  PUT api/todos/:toDoId/complete
+// @desc   Mark a todo as complete
+// @access Private
+router.put("/:toDoId/complete", requiresAuth, async (req, res) => {
+  try {
+    const toDo = await ToDo.findOne({
+      _id: req.params.toDoId,
+      user: req.user._id,
+    });
+
+    if (!toDo) {
+      return res.status(404).json({
+        msg: "ToDo not found",
+      });
+    }
+
+    if (toDo.complete) {
+      return res.status(400).json({
+        error: "ToDo already completed",
+      });
+    }
+
+    const updatedToDo = await ToDo.findOneAndUpdate(
+      {
+        _id: req.params.toDoId,
+        user: req.user._id,
+      },
+      {
+        complete: true,
+        completedAt: new Date(),
+      },
+      {
+        new: true,
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;
