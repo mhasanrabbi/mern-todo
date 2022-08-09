@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400&display=swap');
+
+
+$primary: #00a796;
+$primary-dark: #026158;
+$dark: #1f2732;
+$dark-light: #2f3136;
+$white: #fff;
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: $dark;
+    color: $white;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+p, h1, h2, h3, h4 {
+    margin: 0;
+}
+
+button, input, textarea {
+    font-family: 'Source Sans Pro', sans-serif;
+}
