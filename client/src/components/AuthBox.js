@@ -1,16 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../context/GlobalContext";
 
 const AuthBox = ({ register }) => {
-  const { getCurrentUser } = useGlobalContext();
+  const { getCurrentUser, user } = useGlobalContext();
+  const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [loading, setLoading] = React.useState("");
   const [errors, setErrors] = React.useState({});
+
+  React.useEffect(() => {
+    if (user && navigate) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const onSubmit = (e) => {
     e.preventDefault();
