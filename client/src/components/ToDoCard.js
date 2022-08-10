@@ -6,7 +6,7 @@ const ToDoCard = ({ toDo }) => {
   const [content, setContent] = React.useState(toDo.content);
   const [editing, setEditing] = React.useState(false);
   const input = React.useRef(null);
-  const { toDoComplete, toDoInComplete } = useGlobalContext();
+  const { toDoComplete, toDoInComplete, removeToDo } = useGlobalContext();
 
   const onEdit = (e) => {
     e.preventDefault();
@@ -38,6 +38,25 @@ const ToDoCard = ({ toDo }) => {
     });
   };
 
+  const deleteToDo = (e) => {
+    e.preventDefault();
+
+    if (window.confirm("Are you sure you want to delete this ToDo?")) {
+      axios
+        .delete(`/api/todos/${toDo._id}`)
+        .then((res) => {
+          console.log(res);
+          removeToDo(toDo);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          window.location.reload();
+        });
+    }
+  };
+
   return (
     <div className={`todo ${toDo.complete ? "todo--complete" : ""}`}>
       <input
@@ -57,7 +76,7 @@ const ToDoCard = ({ toDo }) => {
         {!editing ? (
           <>
             {!toDo.complete && <button onClick={onEdit}>Edit</button>}
-            <button>Delete</button>
+            <button onClick={deleteToDo}>Delete</button>
           </>
         ) : (
           <>

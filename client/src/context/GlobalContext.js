@@ -138,6 +138,24 @@ export const GlobalProvider = (props) => {
     });
   };
 
+  const removeToDo = (toDo) => {
+    if (toDo.complete) {
+      dispatch({
+        type: "SET_COMPLETE_TODOS",
+        payload: state.completeToDos.filter(
+          (completeToDo) => completeToDo._id !== toDo._id
+        ),
+      });
+    } else {
+      dispatch({
+        type: "SET_INCOMPLETE_TODOS",
+        payload: state.incompleteToDos.filter(
+          (incompleteToDo) => incompleteToDo._id !== toDo._id
+        ),
+      });
+    }
+  };
+
   const value = {
     ...state,
     getCurrentUser,
@@ -145,6 +163,7 @@ export const GlobalProvider = (props) => {
     addToDo,
     toDoComplete,
     toDoInComplete,
+    removeToDo,
   };
 
   return (
