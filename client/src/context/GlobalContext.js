@@ -99,10 +99,18 @@ export const GlobalProvider = (props) => {
     }
   };
 
+  const addToDo = (toDo) => {
+    dispatch({
+      type: "SET_INCOMPLETE_TODOS",
+      payload: [toDo, ...state.incompleteToDos],
+    });
+  };
+
   const value = {
     ...state,
     getCurrentUser,
     logout,
+    addToDo,
   };
 
   return (
