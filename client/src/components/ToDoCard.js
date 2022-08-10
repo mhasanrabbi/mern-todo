@@ -6,7 +6,7 @@ const ToDoCard = ({ toDo }) => {
   const [content, setContent] = React.useState(toDo.content);
   const [editing, setEditing] = React.useState(false);
   const input = React.useRef(null);
-  const { toDoComplete } = useGlobalContext();
+  const { toDoComplete, toDoInComplete } = useGlobalContext();
 
   const onEdit = (e) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ const ToDoCard = ({ toDo }) => {
   const markAsIncomplete = async (e) => {
     e.preventDefault();
     axios.put(`/api/todos/${toDo._id}/incomplete`).then((res) => {
-      // toDoInComplete(res.data);
+      toDoInComplete(res.data);
     });
   };
 

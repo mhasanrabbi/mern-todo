@@ -120,12 +120,31 @@ export const GlobalProvider = (props) => {
     });
   };
 
+  const toDoInComplete = (toDo) => {
+    dispatch({
+      type: "SET_COMPLETE_TODOS",
+      payload: state.completeToDos.filter(
+        (completeToDo) => completeToDo._id !== toDo._id
+      ),
+    });
+
+    const newInCompleteToDos = [toDo, ...state.incompleteToDos];
+
+    dispatch({
+      type: "SET_INCOMPLETE_TODOS",
+      payload: newInCompleteToDos.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ),
+    });
+  };
+
   const value = {
     ...state,
     getCurrentUser,
     logout,
     addToDo,
     toDoComplete,
+    toDoInComplete,
   };
 
   return (
