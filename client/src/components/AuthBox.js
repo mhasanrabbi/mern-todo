@@ -62,6 +62,8 @@ const AuthBox = ({ register }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+
+              {errors.name && <p className="auth__error">{errors.name}</p>}
             </div>
           )}
 
@@ -73,6 +75,8 @@ const AuthBox = ({ register }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+
+            {errors.email && <p className="auth__error">{errors.email}</p>}
           </div>
 
           <div className="auth__field">
@@ -83,6 +87,10 @@ const AuthBox = ({ register }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            {errors.password && (
+              <p className="auth__error">{errors.password}</p>
+            )}
           </div>
 
           {register && (
@@ -94,16 +102,21 @@ const AuthBox = ({ register }) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {/* <p className="auth__error">
-                Something went wrong. Please try again.
-              </p> */}
+
+              {errors.confirmPassword && (
+                <p className="auth__error">{errors.confirmPassword}</p>
+              )}
             </div>
           )}
 
           <div className="auth__footer">
-            <p className="auth__error">
-              Something went wrong. Please try again.
-            </p>
+            {Object.keys(errors).length > 0 && (
+              <p className="auth__error">
+                {register
+                  ? "Something went wrong. Please try again."
+                  : "Invalid email or password."}
+              </p>
+            )}
 
             <button className="btn" type="submit" disabled={loading}>
               {register ? "Register" : "Login"}
